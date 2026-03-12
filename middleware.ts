@@ -1,17 +1,3 @@
-if (typeof globalThis !== 'undefined' && (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function')) {
-  Object.defineProperty(globalThis, 'localStorage', {
-    value: {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-      clear: () => {},
-      length: 0,
-      key: () => null,
-    },
-    writable: true,
-  });
-}
-
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware();
