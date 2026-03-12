@@ -23,25 +23,25 @@ const CompanionSession = async ({ params }: CompanionSessionPageProps) => {
 
     return (
         <main>
-            <article className="flex rounded-border justify-between p-6 max-md:flex-col">
-                <div className="flex items-center gap-2">
-                    <div className="size-[72px] flex items-center justify-center rounded-lg max-md:hidden" style={{ backgroundColor: getSubjectColor(subject)}}>
-                        <Image src={`/icons/${subject}.svg`} alt={subject} width={35} height={35} />
+            <article className="flex rounded-border justify-between p-6 max-md:flex-col max-md:gap-4">
+                <div className="flex items-center gap-4">
+                    <div className="size-[72px] flex items-center justify-center rounded-lg max-sm:size-[48px]" style={{ backgroundColor: getSubjectColor(subject)}}>
+                        <Image src={`/icons/${subject}.svg`} alt={subject} width={35} height={35} className="max-sm:size-[24px]" />
                     </div>
 
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
-                            <p className="font-bold text-2xl">
+                            <p className="font-bold text-2xl max-sm:text-xl">
                                 {name}
                             </p>
-                            <div className="subject-badge max-sm:hidden">
+                            <div className="subject-badge">
                                 {subject}
                             </div>
                         </div>
-                        <p className="text-lg">{topic}</p>
+                        <p className="text-lg max-sm:text-base opacity-70">{topic}</p>
                     </div>
                 </div>
-                <div className="items-start text-2xl max-md:hidden">
+                <div className="flex items-center text-2xl max-md:text-lg font-medium">
                     {duration} minutes
                 </div>
             </article>
