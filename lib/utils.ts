@@ -68,6 +68,9 @@ export const configureAssistant = (voice: string, style: string, companionName: 
     },
     clientMessages: ["transcript", "speech-update"] as any,
     serverMessages: ["end-of-call-report"] as any,
+    server: {
+      url: `https://your-api-url.com/api/webhooks/vapi`, // This gets overridden in the component
+    },
   };
   return vapiAssistant;
 };

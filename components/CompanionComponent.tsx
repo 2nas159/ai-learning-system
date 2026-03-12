@@ -89,10 +89,12 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
 
         const assistant = configureAssistant(voice, style, name);
         
-        console.log('[Vapi] Starting call with assistant config:', assistant);
+        // Ensure the server URL is correct for webhooks
+        if (assistant.server) {
+            assistant.server.url = `${window.location.origin}/api/webhooks/vapi`;
+        }
 
         const assistantOverrides = {
-            ...assistant,
             variableValues: { 
                 subject, 
                 topic, 
@@ -100,13 +102,12 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
                 userId,
                 companionId,
                 past_memory: pastMemory || "No previous interactions."
-            },
-            clientMessages: ["transcript", "speech-update"],
-            serverMessages: ["end-of-call-report"],
-            serverUrl: `${window.location.origin}/api/webhooks/vapi`,
+            }
         }
 
-        vapi.start(assistantOverrides as any)
+        console.log('[Vapi] Starting call with:', { assistant, assistantOverrides });
+
+        vapi.start(assistant as any, assistantOverrides as any)
     }
 
     const handleDisconnect = () => {
