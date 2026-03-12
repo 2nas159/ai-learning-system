@@ -15,6 +15,9 @@ export const createCompanion = async (formData: CreateCompanion) => {
 
     if(error || !data) throw new Error(error?.message || 'Failed to create a companion');
 
+    revalidatePath('/my-journey');
+    revalidatePath('/companions');
+
     return data[0];
 }
 
