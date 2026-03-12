@@ -12,14 +12,17 @@ export const getSubjectColor = (subject: string) => {
 };
 
 export const configureAssistant = (voice: string, style: string, companionName: string) => {
-  let voiceId = "EXAVITQu4vr4xnSDxMaL"; // Default Sarah ID
+  const SARAH_ID = "EXAVITQu4vr4xnSDxMaL";
+  let voiceId = SARAH_ID;
 
   if (voice === "male" || voice === "female") {
     const genderVoices = voices[voice as keyof typeof voices];
-    voiceId = (genderVoices as any)[style] || (genderVoices as any)["casual"] || "EXAVITQu4vr4xnSDxMaL";
+    voiceId = (genderVoices as any)[style] || (genderVoices as any)["casual"] || SARAH_ID;
+  } else if (voice === "sarah") {
+    voiceId = SARAH_ID;
   } else {
-    // If the voice is not 'male' or 'female', assume it's a direct voiceId
-    voiceId = voice || "EXAVITQu4vr4xnSDxMaL";
+    // If the voice is not 'male', 'female', or 'sarah', assume it's a direct voiceId
+    voiceId = voice || SARAH_ID;
   }
 
   const vapiAssistant: CreateAssistantDTO = {
@@ -42,10 +45,10 @@ export const configureAssistant = (voice: string, style: string, companionName: 
     },
     model: {
       provider: "openai",
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: "system",
+          role: "system" as const,
           content: `You are a highly knowledgeable tutor teaching a real-time voice session with a student. Your goal is to teach the student about the topic and subject.
 
                     Here is the context of what you have talked about in past sessions. Use this to continue the conversation naturally:
@@ -63,8 +66,8 @@ export const configureAssistant = (voice: string, style: string, companionName: 
         },
       ],
     },
-    clientMessages: ["transcript", "speech-update"],
-    serverMessages: ["end-of-call-report"],
+    clientMessages: ["transcript", "speech-update"] as any,
+    serverMessages: ["end-of-call-report"] as any,
   };
   return vapiAssistant;
 };

@@ -50,6 +50,13 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
         const onSpeechStart = () => setIsSpeaking(true);
         const onSpeechEnd = () => setIsSpeaking(false);
 
+        const onVolumeLevel = (level: number) => {
+            if (level > 0.01) {
+                // This will log if the SDK is actually receiving/processing audio output
+                console.log('[Vapi] Audio Volume Level:', level);
+            }
+        };
+
         const onError = (error: Error) => console.log('Error', error);
 
         vapi.on('call-start', onCallStart);
@@ -58,6 +65,7 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
         vapi.on('error', onError);
         vapi.on('speech-start', onSpeechStart);
         vapi.on('speech-end', onSpeechEnd);
+        vapi.on('volume-level', onVolumeLevel);
 
         return () => {
             vapi.off('call-start', onCallStart);
@@ -66,6 +74,7 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
             vapi.off('error', onError);
             vapi.off('speech-start', onSpeechStart);
             vapi.off('speech-end', onSpeechEnd);
+            vapi.off('volume-level', onVolumeLevel);
         }
     }, []);
 
@@ -80,6 +89,8 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
 
         const assistant = configureAssistant(voice, style, name);
         
+        console.log('[Vapi] Starting call with assistant config:', assistant);
+
         const assistantOverrides = {
             ...assistant,
             variableValues: { 
