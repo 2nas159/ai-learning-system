@@ -4,6 +4,7 @@ import { addBookmark } from "@/lib/actions/companion.actions";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 interface CompanionCardProps {
   id: string;
@@ -25,11 +26,23 @@ const CompanionCard = ({
   bookmarked,
 }: CompanionCardProps) => {
   const pathname = usePathname();
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
   const handleBookmark = async () => {
-    if (bookmarked) {
-      await removeBookmark(id, pathname);
-    } else {
-      await addBookmark(id, pathname);
+    // Optimistic update
+    const previousState = isBookmarked;
+    setIsBookmarked(!previousState);
+
+    try {
+      if (previousState) {
+        await removeBookmark(id, pathname);
+      } else {
+        await addBookmark(id, pathname);
+      }
+    } catch (error) {
+      // Revert if API call fails
+      setIsBookmarked(previousState);
+      console.error("Failed to update bookmark:", error);
     }
   };
   return (
@@ -39,7 +52,7 @@ const CompanionCard = ({
         <button className="companion-bookmark" onClick={handleBookmark}>
           <Image
             src={
-              bookmarked ? "/icons/bookmark-filled.svg" : "/icons/bookmark.svg"
+              isBookmarked ? "/icons/bookmark-filled.svg" : "/icons/bookmark.svg"
             }
             alt="bookmark"
             width={12.5}
