@@ -45,8 +45,8 @@ export async function POST(req: Request) {
 
     // For any other Vapi webhook events, return a normal 200 OK
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error("Vapi Webhook Processing Error:", error.message);
+  } catch (error: unknown) {
+    console.error("Vapi Webhook Processing Error:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

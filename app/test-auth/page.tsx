@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { auth } from "@clerk/nextjs/server";
 import { getAllCompanions } from "@/lib/actions/companion.actions";
 

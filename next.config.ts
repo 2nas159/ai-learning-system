@@ -20,11 +20,17 @@ export default withSentryConfig(nextConfig, {
 // For all available options, see:
 // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-org: "jsmpro",
-project: "jsm_converso",
+// org: "jsmpro",
+// project: "jsm_converso",
 
 // Only print logs for uploading source maps in CI
 silent: !process.env.CI,
+
+// Add handleError to prevent build failure on Sentry release errors
+// @ts-ignore
+handleError: (err) => {
+  console.warn("Sentry release error skipped:", err.message);
+},
 
 // For all available options, see:
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
