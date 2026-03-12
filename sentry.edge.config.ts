@@ -3,6 +3,26 @@
 // Note that this config is unrelated to the Vercel Edge Runtime and is also required when running locally.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
+if (process.env.NODE_ENV === 'development' && typeof globalThis !== 'undefined') {
+  try {
+    if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function') {
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: {
+          getItem: () => null,
+          setItem: () => {},
+          removeItem: () => {},
+          clear: () => {},
+          length: 0,
+          key: () => null,
+        },
+        writable: true,
+      });
+    }
+  } catch (e) {
+    // Ignore freeze errors in strict edge runtimes
+  }
+}
+
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({

@@ -1,3 +1,23 @@
+if (process.env.NODE_ENV === 'development' && typeof globalThis !== 'undefined') {
+  try {
+    if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'function') {
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: {
+          getItem: () => null,
+          setItem: () => {},
+          removeItem: () => {},
+          clear: () => {},
+          length: 0,
+          key: () => null,
+        },
+        writable: true,
+      });
+    }
+  } catch (e) {
+    // Ignore freeze errors in strict edge runtimes
+  }
+}
+
 import * as Sentry from '@sentry/nextjs';
 
 export async function register() {
