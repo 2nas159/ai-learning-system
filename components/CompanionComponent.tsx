@@ -78,7 +78,10 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
     const handleCall = async () => {
         setCallStatus(CallStatus.CONNECTING)
 
+        const assistant = configureAssistant(voice, style, name);
+        
         const assistantOverrides = {
+            ...assistant,
             variableValues: { 
                 subject, 
                 topic, 
@@ -87,13 +90,12 @@ const CompanionComponent = ({ companionId, subject, topic, name, userId, userNam
                 companionId,
                 past_memory: pastMemory || "No previous interactions."
             },
-            clientMessages: ["transcript"],
+            clientMessages: ["transcript", "speech-update"],
             serverMessages: ["end-of-call-report"],
             serverUrl: `${window.location.origin}/api/webhooks/vapi`,
         }
 
-        // @ts-expect-error
-        vapi.start(configureAssistant(voice, style), assistantOverrides)
+        vapi.start(assistantOverrides as any)
     }
 
     const handleDisconnect = () => {

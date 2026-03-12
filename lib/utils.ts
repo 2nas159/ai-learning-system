@@ -11,24 +11,24 @@ export const getSubjectColor = (subject: string) => {
   return subjectsColors[subject as keyof typeof subjectsColors];
 };
 
-export const configureAssistant = (voice: string, style: string) => {
-  let voiceId = "sarah";
+export const configureAssistant = (voice: string, style: string, companionName: string) => {
+  let voiceId = "EXAVITQu4vr4xnSDxMaL"; // Default Sarah ID
 
   if (voice === "male" || voice === "female") {
     const genderVoices = voices[voice as keyof typeof voices];
-    voiceId = (genderVoices as any)[style] || (genderVoices as any)["casual"] || "sarah";
+    voiceId = (genderVoices as any)[style] || (genderVoices as any)["casual"] || "EXAVITQu4vr4xnSDxMaL";
   } else {
     // If the voice is not 'male' or 'female', assume it's a direct voiceId
-    voiceId = voice || "sarah";
+    voiceId = voice || "EXAVITQu4vr4xnSDxMaL";
   }
 
   const vapiAssistant: CreateAssistantDTO = {
-    name: "Companion",
+    name: companionName || "Companion",
     firstMessage:
-        "Hello, let's start the session. Today we'll be talking about {{topic}}.",
+        `Hello, I am ${companionName}. Let's start the session. Today we'll be talking about {{topic}}.`,
     transcriber: {
       provider: "deepgram",
-      model: "nova-3",
+      model: "nova-2",
       language: "en",
     },
     voice: {
@@ -63,8 +63,8 @@ export const configureAssistant = (voice: string, style: string) => {
         },
       ],
     },
-    clientMessages: [],
-    serverMessages: [],
+    clientMessages: ["transcript", "speech-update"],
+    serverMessages: ["end-of-call-report"],
   };
   return vapiAssistant;
 };
