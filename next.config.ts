@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
       remotePatterns: [
           { hostname: 'img.clerk.com'}
       ]
-  }
+  },
+  devIndicators: false,
 };
 
 export default withSentryConfig(nextConfig, {
